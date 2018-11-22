@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" debug="false">
+	<jmxConfigurator />
+
+	<property name="APP_NAME" value="app-demo1" />
+	<property name="APPLOG_PATH" value="/var/log/demo" />
+
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${APPLOG_PATH}/${APP_NAME}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${APPLOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="dailyRollingFileErrorAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${APPLOG_PATH}/${APP_NAME}-error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${APPLOG_PATH}/${APP_NAME}-error.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	
+	<!-- 自定义日志 -->
+    <logger name="com.leadingsoft" level="INFO" />  
+    <logger name="org.springframework" level="WARN" />
+    
+	<root level="INFO">
+		<appender-ref ref="dailyRollingFileAppender" />
+		<appender-ref ref="dailyRollingFileErrorAppender" />
+	</root>
+</configuration>

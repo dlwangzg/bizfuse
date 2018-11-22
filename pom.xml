@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.leadingsoft.demo</groupId>
+    <artifactId>microservice</artifactId>
+    <version>1.0.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>com.leadingsoft.bizfuse</groupId>
+        <artifactId>bizfuse-parent</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <name>力鼎bizfuse3.0 + 微服务DEMO</name>
+    <description>力鼎bizfuse3.0 + 微服务DEMO</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <group.version>1.0.0.0-SNAPSHOT</group.version>
+    </properties>
+
+    <modules>
+        <module>registry</module>
+        <module>common</module>
+        <module>gateway</module>
+        <module>app-demo1</module>
+        <module>app-demo2</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.leadingsoft.demo</groupId>
+                <artifactId>common</artifactId>
+                <version>${group.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

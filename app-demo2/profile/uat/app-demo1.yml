@@ -1,0 +1,109 @@
+server:
+  port: 8082
+  contextPath: 
+
+spring: 
+    profiles.active: uat
+    application:
+        name: app-demo1
+    jackson:
+        serialization.write_dates_as_timestamps: true
+    datasource: 
+        url: jdbc:mysql://127.0.0.1/app1_db?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true
+        driver-class-name: com.mysql.jdbc.Driver
+        username: root
+        password: 123456
+        test-while-idle: true
+        max-wait-millis: 30000
+        validation-query: 'SELECT 1'
+        time-between-eviction-runs-millis: 20000
+        min-evictable-idle-time-millis: 28700
+    jpa:
+        show-sql: true
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        hibernate.ddl-auto: update
+        hibernate.show-sql: false
+
+logging:
+  config: logback.xml
+  path: /var/log/demo
+  level:
+    com.leadingsoft.demo: INFO
+    org.springframework: WARN
+
+## Json-Web-Token
+security.authentication.jwt.secret: demo-token
+
+## 微服务客户端配置
+eureka: # 服务发现的客户端配置
+    instance:
+        preferIpAddress: true
+        #instanceId: ${spring.application.name}:${random.int[1001,9999]}
+    client:
+        serviceUrl:
+            defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
+
+ribbon: # 支持微服务集群负载均衡
+    eureka.enabled: true
+    # 读超时设置
+    ReadTimeout: 10000
+
+feign: # Feign熔断机制配置
+  hystrix:
+    enabled: true
+
+hystrix: # 熔断机制超时配置 See https://github.com/Netflix/Hystrix/wiki/Configuration
+    metrics.enabled: false
+    command:
+        default:
+            execution.isolation.thread.timeoutInMilliseconds: 10000
+
+## Bizfuse3.0 Web 常用配置
+bizfuse: 
+    ## WEB常用配置
+    web: 
+        async: # 异步配置
+            corePoolSize: 2
+            maxPoolSize: 50
+            queueCapacity: 10000
+        #cors: # 支持跨域的配置 By default CORS are not enabled. Uncomment to enable.
+        #    allowed-origins: "*"
+        #    allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        #    allowed-headers: "*"
+        #    exposed-headers:
+        #    allow-credentials: true
+        #    max-age: 1800
+        #corsPath: ["/**"]
+        swagger: # 动态API文档配置
+            title: App1 API
+            description: open API documentation
+            version: 0.0.1
+            termsOfServiceUrl:
+            contactName:
+            contactUrl:
+            contactEmail:
+            license:
+            licenseUrl: 
+            pathPatterns: /w/.*, /m/.*
+        metrics: # 服务监控和度量配置 DropWizard Metrics configuration, used by MetricsConfiguration
+            jmx.enabled: false
+            spark:
+                enabled: false
+                host: localhost
+                port: 9999
+            graphite:
+                enabled: false
+                host: localhost
+                port: 2003
+                prefix: microapp
+            logs: # Reports Dropwizard metrics in the logs
+                enabled: false
+                reportFrequency: 60 # in seconds
+        logging: # 日志配置
+            logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+                enabled: false
+                host: localhost
+                port: 5000
+                queueSize: 512
+            spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+                enabled: false

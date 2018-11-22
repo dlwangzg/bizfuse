@@ -1,0 +1,117 @@
+server:
+    port: 8080
+    contextPath: 
+    compression:
+        enabled: true
+        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
+        
+name: gateway
+
+spring: 
+    profiles.active: dev
+    mvc:
+        favicon.enabled: false
+    application: 
+        name: gateway
+        
+feign.hystrix.enabled: false ##禁用熔断机制      
+ 
+management:
+  security:
+    enabled: false
+
+logging:
+  path: logs
+  level:
+    com.leadingsoft.demo.gateway: DEBUG
+    org.springframework: WARN
+    
+## 微服务客户端配置
+eureka: # 服务发现的客户端配置
+    instance:
+        preferIpAddress: true
+        #instanceId: ${spring.application.name}:${random.int[1001,9999]}
+    client:
+        serviceUrl:
+            defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
+
+ribbon:
+    eureka:
+        enabled: true
+    # 连接超时设置
+    ConnectTimeout: 3000
+    # 读超时设置
+    ReadTimeout: 10000
+
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
+
+bizfuse: 
+    web: 
+        async:
+            corePoolSize: 2
+            maxPoolSize: 50
+            queueCapacity: 10000
+        #cors: #By default CORS are not enabled. Uncomment to enable.
+        #    allowed-origins: "*"
+        #    allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        #    allowed-headers: "*"
+        #    exposed-headers: 
+        #    allow-credentials: true
+        #    max-age: 1800
+        swagger:
+            title: Gateway API
+            description: Gateway API documentation
+            version: 0.0.1
+            termsOfServiceUrl:
+            contactName:
+            contactUrl:
+            contactEmail:
+            license:
+            licenseUrl: 
+            pathPatterns: /.*
+        metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+            jmx.enabled: false
+            spark:
+                enabled: false
+                host: localhost
+                port: 9999
+            graphite:
+                enabled: false
+                host: localhost
+                port: 2003
+                prefix: gateway
+            logs: # Reports Dropwizard metrics in the logs
+                enabled: false
+                reportFrequency: 60 # in seconds
+        logging:
+            logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+                enabled: false
+                host: localhost
+                port: 5000
+                queueSize: 512
+            spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+                enabled: false
+
+# 集群Session配置
+cluster.session.enabled:  true
+hazelcast:
+  group:
+    name: "gateway"
+    password: "rd123456"
+  network: 
+    port: 55000
+    portCount: 20
+    interfaces: 127.0.0.*
+    joinMembers: 127.0.0.1
+    
+## Json-Web-Token
+security.authentication.jwt.secret: demo-token
+

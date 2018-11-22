@@ -1,0 +1,67 @@
+server:
+  port: 19090
+  contextPath: 
+
+spring: 
+    profiles.active: dev,swagger
+    application:
+        name: BizfuseWebMVC
+    jackson:
+        serialization.write_dates_as_timestamps: true
+    data.mongodb: 
+          database: filestorage
+          host: localhost
+          username: filestorage
+          password: rd123456
+          port: 27017
+          repositories.enabled: true
+
+job.node: srfs2
+## Bizfuse3.0 Web 常用配置
+bizfuse: 
+    ## WEB常用配置
+    web: 
+        async: # 异步配置
+            corePoolSize: 2
+            maxPoolSize: 50
+            queueCapacity: 10000
+        #cors: # 支持跨域的配置 By default CORS are not enabled. Uncomment to enable.
+        #    allowed-origins: "*"
+        #    allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        #    allowed-headers: "*"
+        #    exposed-headers:
+        #    allow-credentials: true
+        #    max-age: 1800
+        swagger: # 动态API文档配置
+            title: open API
+            description: open API documentation
+            version: 0.0.1
+            termsOfServiceUrl:
+            contactName:
+            contactUrl:
+            contactEmail:
+            license:
+            licenseUrl: 
+            pathPatterns: /w/.*, /m/.*
+        metrics: # 服务监控和度量配置 DropWizard Metrics configuration, used by MetricsConfiguration
+            jmx.enabled: false
+            spark:
+                enabled: false
+                host: localhost
+                port: 9999
+            graphite:
+                enabled: false
+                host: localhost
+                port: 2003
+                prefix: microapp
+            logs: # Reports Dropwizard metrics in the logs
+                enabled: false
+                reportFrequency: 60 # in seconds
+        logging: # 日志配置
+            logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+                enabled: false
+                host: localhost
+                port: 5000
+                queueSize: 512
+            spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+                enabled: false

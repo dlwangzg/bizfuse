@@ -1,0 +1,15 @@
+server:
+  port: 58761
+
+eureka:
+  instance:
+    hostname: discovery
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://admin:admin@registry-app-1:58761/eureka/,http://admin:admin@registry-app-2:58761/eureka/
+
+spring.cloud.config.discovery.enabled: true
+
+spring.profiles.active: prod
